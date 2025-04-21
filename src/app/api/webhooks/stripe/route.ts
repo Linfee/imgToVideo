@@ -9,9 +9,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const prisma = new PrismaClient();
 
+export const dynamic = 'force-dynamic'; // 强制动态渲染
+
 export async function POST(request: Request) {
   const body = await request.text();
-  const signature = headers().get("Stripe-Signature")!;
+  const signature = request.headers.get("Stripe-Signature")!;
 
   let event: Stripe.Event;
 
@@ -21,8 +23,9 @@ export async function POST(request: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (err) {
-    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+    return new NextResponse(`Webhook Error: ${errorMessage}`, { status: 400 });
   }
 
   const session = event.data.object as Stripe.Checkout.Session;

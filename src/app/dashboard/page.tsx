@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Video, CreditCard, RefreshCw } from "lucide-react";
@@ -24,6 +24,18 @@ export default async function Dashboard() {
     prisma.video.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
+        status: true,
+        title: true,
+        description: true,
+        url: true,
+        thumbnail: true,
+        images: true
+      }
     }),
   ]);
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
@@ -64,6 +64,8 @@ export async function POST(request: Request) {
         description,
         images,
         userId: user.id,
+        url: "", // 初始为空字符串，后续处理完成后更新
+        status: "processing", // 设置初始状态
       },
     });
 

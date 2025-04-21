@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
-import { PrismaClient } from "@prisma/client";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic'; // 强制动态渲染
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {

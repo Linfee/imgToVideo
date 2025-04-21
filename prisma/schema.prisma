@@ -66,6 +66,7 @@ model Video {
   description String?
   url         String
   thumbnail   String?
+  images      String[] // 新增的图片数组字段
   status      String   @default("processing")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
